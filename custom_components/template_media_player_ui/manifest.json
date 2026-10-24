@@ -1,1 +1,13 @@
-hi
+{
+  "domain": "template_media_player_ui",
+  "name": "Template Media Player (UI)",
+  "codeowners": [],
+  "config_flow": true,
+  "dependencies": ["media_player"],
+  "documentation": "https://github.com/EuleMitKeule/template-media-player",
+  "integration_type": "device",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/EuleMitKeule/template-media-player/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
