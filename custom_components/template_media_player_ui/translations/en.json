@@ -3,16 +3,14 @@
     "step": {
       "user": {
         "title": "New template media player",
-        "description": "Just the basics. After it's created, hit the gear/Configure button on the integration card to add attributes, actions, sources and more.",
+        "description": "Just the basics. When it's created, press the gear / Configure button on the integration to set up its state, details and buttons. Everything is point-and-click, no templates needed.",
         "data": {
           "name": "Name",
           "device_class": "Device class",
-          "base_media_player_entity_id": "Base media player",
-          "state": "State template"
+          "base_media_player_entity_id": "Base media player"
         },
         "data_description": {
-          "base_media_player_entity_id": "Optional. Copy state/attributes from this player and forward any action you don't define.",
-          "state": "Optional. Renders to on, off, idle, playing, paused, standby or buffering."
+          "base_media_player_entity_id": "Optional. Anything you don't set up yourself is copied from, or passed on to, this player."
         }
       }
     },
@@ -26,192 +24,264 @@
     "step": {
       "init": {
         "title": "Template Media Player",
-        "description": "Pick a section to edit. Each page saves the moment you hit Submit and the player reloads. Hit 'Save & close' when you're done.",
+        "description": "Pick what you want to set up. Everything saves as you go. Choose **Save & close** when you're finished.\n\n{summary}",
         "menu_options": {
-          "general": "General: state, base player, variables",
-          "attributes_media": "Attributes: media info",
-          "attributes_player": "Attributes: volume, source, shuffle, repeat",
-          "custom_attributes": "Custom attributes (anything you want)",
-          "services_playback": "Actions: playback",
-          "services_power": "Actions: power & volume",
-          "services_other": "Actions: repeat, shuffle, play media, grouping",
-          "sources": "Sources",
+          "general": "Basics: name look, base player, media browser",
+          "state": "State: playing, paused, off...",
+          "availability": "Availability: when it shows as unavailable",
+          "attributes_media": "What's playing: title, artist, artwork, duration...",
+          "attributes_player": "Player info: volume, muted, source, shuffle, repeat",
+          "custom_attrs": "Extra attributes (your own)",
+          "actions_playback": "Buttons: play, pause, stop, next, previous, seek",
+          "actions_power": "Buttons: power and volume",
+          "actions_other": "Buttons: repeat, shuffle, play media, grouping",
+          "sources": "Sources (inputs)",
           "sound_modes": "Sound modes",
-          "browse_search": "Browse / search media",
+          "advanced": "Advanced: write templates / YAML yourself",
           "finish": "Save & close"
         }
       },
       "general": {
-        "title": "General",
-        "description": "Core settings. Everything here is optional.",
+        "title": "Basics",
+        "description": "All optional.",
         "data": {
           "device_class": "Device class",
           "icon": "Icon",
           "base_media_player_entity_id": "Base media player",
-          "state": "State template",
-          "availability": "Availability template",
-          "global_template": "Global template",
-          "variables": "Variables"
+          "browse_media_entity_id": "Media browser from",
+          "search_media_entity_id": "Media search from"
         },
         "data_description": {
-          "base_media_player_entity_id": "Optional. Anything you don't define yourself (state, attributes, actions) is taken from or forwarded to this player.",
-          "state": "Must render to one of: on, off, idle, playing, paused, standby, buffering.",
-          "availability": "Renders false/off/none/unavailable = entity shows unavailable.",
-          "global_template": "Pasted in front of every template, re-evaluated each update. Good for {% set tv = 'media_player.tv' %}.",
-          "variables": "YAML dictionary. Values are templates rendered ONCE at startup, usable in every template. Example:\ntv: media_player.living_room_tv"
+          "base_media_player_entity_id": "Anything you don't set up yourself (state, info, buttons) is copied from, or passed on to, this player.",
+          "browse_media_entity_id": "Borrow another player's media browser. Uses the base player if empty.",
+          "search_media_entity_id": "Borrow another player's media search. Uses the base player if empty."
         }
       },
       "attributes_media": {
-        "title": "Media attributes",
-        "description": "Template. Leave empty to inherit from the base player (if one is set). The variable {{ attribute }} holds the attribute name.",
+        "title": "What's playing",
+        "description": "Pick one to set it up. A ✓ means it's already set.",
         "data": {
-          "media_title": "Media title",
-          "media_artist": "Media artist",
-          "media_album_name": "Media album name",
-          "media_album_artist": "Media album artist",
-          "media_series_title": "Media series title",
-          "media_season": "Media season",
-          "media_episode": "Media episode",
-          "media_channel": "Media channel",
-          "media_playlist": "Media playlist",
-          "media_track": "Media track",
-          "media_content_id": "Media content id",
-          "media_content_type": "Media content type",
-          "media_duration": "Media duration",
-          "media_position": "Media position",
-          "media_position_updated_at": "Media position updated at",
-          "media_image_url": "Media image url",
-          "media_image_remotely_accessible": "Media image remotely accessible",
-          "entity_picture": "Entity picture",
-          "app_id": "App id",
-          "app_name": "App name",
-          "media_content_rating": "Media content rating",
-          "media_summary": "Media summary"
-        },
-        "data_description": {
-          "media_duration": "Total seconds.",
-          "media_position": "Seconds into the current item.",
-          "media_position_updated_at": "Timestamp the position was measured. Optional; filled in automatically if you only give a position.",
-          "entity_picture": "Cover art URL.",
-          "media_content_rating": "Shows up as a plain extra attribute.",
-          "media_summary": "Shows up as a plain extra attribute."
+          "choice": "Choose one"
         }
       },
       "attributes_player": {
-        "title": "Player attributes",
-        "description": "Template. Leave empty to inherit from the base player (if one is set).",
+        "title": "Player info",
+        "description": "Pick one to set it up. A ✓ means it's already set.",
         "data": {
-          "volume_level": "Volume level",
-          "is_volume_muted": "Is volume muted",
-          "source": "Source",
-          "sound_mode": "Sound mode",
-          "shuffle": "Shuffle",
+          "choice": "Choose one"
+        }
+      },
+      "actions_playback": {
+        "title": "Playback buttons",
+        "description": "Pick one to set it up. A ✓ means it's already set. You'll choose what happens when it's pressed.",
+        "data": {
+          "choice": "Choose one"
+        }
+      },
+      "actions_power": {
+        "title": "Power and volume buttons",
+        "description": "Pick one to set it up. A ✓ means it's already set. You'll choose what happens when it's pressed.",
+        "data": {
+          "choice": "Choose one"
+        }
+      },
+      "actions_other": {
+        "title": "Other buttons",
+        "description": "Pick one to set it up. A ✓ means it's already set. You'll choose what happens when it's pressed.",
+        "data": {
+          "choice": "Choose one"
+        }
+      },
+      "value_start": {
+        "title": "{label}: where does it come from?",
+        "description": "{help}\n\nCurrently: {current}",
+        "data": {
+          "mode": "Choose how to set it"
+        }
+      },
+      "value_entity": {
+        "title": "{label}: pick an entity",
+        "description": "Choose the entity to read from.",
+        "data": {
+          "entity": "Entity",
+          "scale_100": "Value is 0-100 (convert to 0-1)"
+        },
+        "data_description": {
+          "scale_100": "Turn this on if the entity reports volume as a percentage."
+        }
+      },
+      "value_attribute": {
+        "title": "{label}: pick an attribute",
+        "description": "Which attribute of {entity} should be used? Pick from the list, or type one.",
+        "data": {
+          "attribute": "Attribute",
+          "scale_100": "Value is 0-100 (convert to 0-1)"
+        },
+        "data_description": {
+          "scale_100": "Turn this on if the entity reports volume as a percentage."
+        }
+      },
+      "value_states": {
+        "title": "{label}: which states?",
+        "description": "Choose every state of {entity} that counts as yes. Pick from the list or type your own and press Enter.",
+        "data": {
+          "states": "States"
+        }
+      },
+      "value_state_map": {
+        "title": "State: match up the states",
+        "description": "For each player state, choose which states of {entity} mean it. Leave blank the ones you don't need. Pick from the list or type your own and press Enter.",
+        "data": {
+          "when_playing": "Playing when it is",
+          "when_paused": "Paused when it is",
+          "when_idle": "Idle when it is",
+          "when_on": "On when it is",
+          "when_off": "Off when it is",
+          "when_standby": "Standby when it is",
+          "when_buffering": "Buffering when it is",
+          "fallback": "If nothing above matches, show as"
+        }
+      },
+      "value_fixed": {
+        "title": "{label}: fixed value",
+        "description": "This text will always be used.",
+        "data": {
+          "text": "Value"
+        }
+      },
+      "value_custom": {
+        "title": "{label}: template",
+        "description": "Advanced. Write a template that gives the value.",
+        "data": {
+          "template": "Template"
+        }
+      },
+      "custom_attrs": {
+        "title": "Extra attributes",
+        "description": "Add anything you like to the player as an extra attribute. You have {count} so far.",
+        "menu_options": {
+          "custom_attr_add": "Add or change an attribute",
+          "custom_attr_remove": "Remove attributes",
+          "init": "Back"
+        }
+      },
+      "custom_attr_add": {
+        "title": "Add or change an attribute",
+        "description": "Give it a name, or pick an existing one to change it. Next you'll choose where its value comes from.",
+        "data": {
+          "name": "Attribute name"
+        }
+      },
+      "custom_attr_remove": {
+        "title": "Remove attributes",
+        "description": "",
+        "data": {
+          "names": "Attributes to remove"
+        }
+      },
+      "actions_existing": {
+        "title": "{label}: already set up",
+        "description": "Right now it does:\n\n{current}",
+        "menu_options": {
+          "action_replace": "Start over with a new action",
+          "action_add": "Add another step after these",
+          "action_yaml_edit": "Advanced: edit as YAML",
+          "action_remove": "Remove it",
+          "actions_done": "Back"
+        }
+      },
+      "action_type": {
+        "title": "{label}: what should happen?",
+        "description": "Choose what this does when it's used.\n\nValues you can use: {vars}",
+        "data": {
+          "type": "Choose one"
+        }
+      },
+      "action_forward": {
+        "title": "{label}: pass it on",
+        "description": "The other player will do the same thing, using the value it's given.",
+        "data": {
+          "entity": "Media player",
+          "target_name": "Name on that player"
+        },
+        "data_description": {
+          "target_name": "Optional. Only needed if that player calls it something different."
+        }
+      },
+      "action_call_entity": {
+        "title": "{label}: control a device",
+        "description": "Which device or entity should be controlled?",
+        "data": {
+          "entity": "Entity"
+        }
+      },
+      "action_call_service": {
+        "title": "{label}: what should it do?",
+        "description": "What should happen to {entity}? Pick from the list, or type any service name.",
+        "data": {
+          "service": "Action"
+        }
+      },
+      "action_call_fields": {
+        "title": "{label}: details",
+        "description": "A little more detail for {entity}.",
+        "data": {
+          "seek_position": "Position (seconds)",
+          "volume_level": "Volume (0 to 1)",
+          "is_volume_muted": "Mute",
+          "source": "Source name",
+          "sound_mode": "Sound mode name",
           "repeat": "Repeat",
-          "group_members": "Group members"
+          "shuffle": "Shuffle",
+          "media_content_id": "Media to play",
+          "media_content_type": "Media type",
+          "group_members": "Players to group with",
+          "command": "Command (separate several with commas)",
+          "device": "Device (optional)",
+          "option": "Option",
+          "value": "Value",
+          "scale_100": "Convert volume from 0-1 to 0-100"
         },
         "data_description": {
-          "volume_level": "A number from 0 to 1.",
-          "repeat": "One of: off, all, one.",
-          "group_members": "A list of entity IDs, or a comma separated string."
+          "scale_100": "Turn this on if the device expects a volume from 0 to 100."
         }
       },
-      "custom_attributes": {
-        "title": "Custom attributes",
-        "description": "Add any extra attributes you want, as a YAML dictionary of name: template.",
+      "action_wait": {
+        "title": "{label}: wait",
+        "description": "Pause before the next step runs.",
         "data": {
-          "custom_attributes": "Custom attributes"
-        },
-        "data_description": {
-          "custom_attributes": "Example:\nroom: Living Room\nsignal: \"{{ states('sensor.wifi_signal') }}\""
+          "seconds": "Seconds"
         }
       },
-      "services_playback": {
-        "title": "Actions: playback",
-        "description": "Actions to run when each service is called. Leave empty to use the base player (or nothing).",
+      "action_yaml": {
+        "title": "{label}: actions",
+        "description": "Advanced. Build the actions in the editor, or switch it to YAML mode. Values you can use: {vars}",
         "data": {
-          "media_play": "Media play",
-          "media_pause": "Media pause",
-          "media_stop": "Media stop",
-          "media_play_pause": "Media play pause",
-          "media_next_track": "Media next track",
-          "media_previous_track": "Media previous track",
-          "media_seek": "Media seek"
-        },
-        "data_description": {
-          "media_seek": "Variable: {{ position }}"
+          "actions": "Actions"
         }
       },
-      "services_power": {
-        "title": "Actions: power & volume",
-        "description": "Actions to run when each service is called.",
-        "data": {
-          "turn_on": "Turn on",
-          "turn_off": "Turn off",
-          "toggle": "Toggle",
-          "volume_up": "Volume up",
-          "volume_down": "Volume down",
-          "volume_mute": "Volume mute",
-          "volume_set": "Volume set"
-        },
-        "data_description": {
-          "volume_mute": "Variable: {{ mute }}  (true/false)",
-          "volume_set": "Variable: {{ volume }}  (0 to 1)"
-        }
-      },
-      "services_other": {
-        "title": "Actions: other",
-        "description": "Actions to run when each service is called.",
-        "data": {
-          "repeat_set": "Repeat set",
-          "shuffle_set": "Shuffle set",
-          "play_media": "Play media",
-          "clear_playlist": "Clear playlist",
-          "join": "Join",
-          "unjoin": "Unjoin"
-        },
-        "data_description": {
-          "repeat_set": "Variable: {{ repeat }}  (off/all/one)",
-          "shuffle_set": "Variable: {{ shuffle }}  (true/false)",
-          "play_media": "Variables: {{ media_id }}, {{ media_type }}",
-          "join": "Variable: {{ group_members }}"
-        }
-      },
-      "browse_search": {
-        "title": "Browse / search media",
-        "description": "Borrow another media player's media browser and search.",
-        "data": {
-          "browse_media_entity_id": "Browse media player",
-          "search_media_entity_id": "Search media player"
-        },
-        "data_description": {
-          "browse_media_entity_id": "Falls back to the base player if empty.",
-          "search_media_entity_id": "Falls back to the base player if empty."
+      "action_more": {
+        "title": "{label}: saved",
+        "description": "Saved. This is what it does now:\n\n{current}",
+        "menu_options": {
+          "action_type": "Add another step (for example, also turn on a second device)",
+          "actions_done": "Done"
         }
       },
       "sources": {
         "title": "Sources",
-        "description": "Each source is a name plus the actions that run when someone picks it.",
+        "description": "Each source is a name, plus what happens when someone picks it. You have {count} so far.",
         "menu_options": {
-          "sources_edit": "Add or edit a source",
+          "sources_edit": "Add or change a source",
           "sources_remove": "Remove sources",
           "init": "Back"
         }
       },
       "sources_edit": {
-        "title": "Add or edit a source",
-        "description": "",
+        "title": "Add or change a source",
+        "description": "Pick a source from the list (names from the base player are suggested, and ✓ marks ones you've set up), or type a new name.",
         "data": {
           "name": "Source name"
-        },
-        "data_description": {
-          "name": "Pick an existing source to edit it, or type a new name."
-        }
-      },
-      "sources_actions": {
-        "title": "Actions for {name}",
-        "description": "Runs when this source is selected. Variable: {{ source }}",
-        "data": {
-          "actions": "Actions"
         }
       },
       "sources_remove": {
@@ -223,28 +293,18 @@
       },
       "sound_modes": {
         "title": "Sound modes",
-        "description": "Each sound mode is a name plus the actions that run when someone picks it.",
+        "description": "Each sound mode is a name, plus what happens when someone picks it. You have {count} so far.",
         "menu_options": {
-          "sound_modes_edit": "Add or edit a sound mode",
+          "sound_modes_edit": "Add or change a sound mode",
           "sound_modes_remove": "Remove sound modes",
           "init": "Back"
         }
       },
       "sound_modes_edit": {
-        "title": "Add or edit a sound mode",
-        "description": "",
+        "title": "Add or change a sound mode",
+        "description": "Pick a sound mode from the list (names from the base player are suggested, and ✓ marks ones you've set up), or type a new name.",
         "data": {
           "name": "Sound mode name"
-        },
-        "data_description": {
-          "name": "Pick an existing one to edit it, or type a new name."
-        }
-      },
-      "sound_modes_actions": {
-        "title": "Actions for {name}",
-        "description": "Runs when this sound mode is selected. Variable: {{ sound_mode }}",
-        "data": {
-          "actions": "Actions"
         }
       },
       "sound_modes_remove": {
@@ -252,6 +312,135 @@
         "description": "",
         "data": {
           "names": "Sound modes to remove"
+        }
+      },
+      "advanced": {
+        "title": "Advanced",
+        "description": "For power users: write templates and YAML directly. Anything set here shows up in the simple menus too.",
+        "menu_options": {
+          "adv_general": "State, availability, global template, variables",
+          "adv_attributes_media": "Templates: what's playing",
+          "adv_attributes_player": "Templates: player info",
+          "adv_custom_attributes": "Templates: extra attributes",
+          "adv_services_playback": "YAML: playback buttons",
+          "adv_services_power": "YAML: power and volume buttons",
+          "adv_services_other": "YAML: other buttons",
+          "init": "Back"
+        }
+      },
+      "adv_general": {
+        "title": "Advanced: general",
+        "description": "Templates and variables. All optional.",
+        "data": {
+          "state": "State template",
+          "availability": "Availability template",
+          "global_template": "Global template",
+          "variables": "Variables"
+        },
+        "data_description": {
+          "state": "Must give one of: on, off, idle, playing, paused, standby, buffering.",
+          "availability": "False, off, none or unavailable makes the player show as unavailable.",
+          "global_template": "Added in front of every template, re-checked each update. Good for set lines.",
+          "variables": "A YAML dictionary. Values are templates worked out once at startup and usable in every template."
+        }
+      },
+      "adv_attributes_media": {
+        "title": "Advanced: what's playing",
+        "description": "Templates. Leave empty to copy from the base player (if you set one).",
+        "data": {
+          "media_title": "Title",
+          "media_artist": "Artist",
+          "media_album_name": "Album",
+          "media_album_artist": "Album artist",
+          "media_series_title": "Series title",
+          "media_season": "Season",
+          "media_episode": "Episode",
+          "media_channel": "Channel",
+          "media_playlist": "Playlist",
+          "media_track": "Track number",
+          "media_content_id": "Content ID",
+          "media_content_type": "Content type",
+          "media_duration": "Duration",
+          "media_position": "Position",
+          "media_position_updated_at": "Position updated at",
+          "media_image_url": "Image URL",
+          "media_image_remotely_accessible": "Image is remotely accessible",
+          "entity_picture": "Entity picture",
+          "app_id": "App ID",
+          "app_name": "App name",
+          "media_content_rating": "Content rating",
+          "media_summary": "Summary"
+        },
+        "data_description": {
+          "media_duration": "Total seconds.",
+          "media_position": "Seconds into the current item.",
+          "media_position_updated_at": "When the position was measured. Filled in automatically if you only give a position.",
+          "entity_picture": "Cover art address.",
+          "media_content_rating": "Shows up as a plain extra attribute.",
+          "media_summary": "Shows up as a plain extra attribute."
+        }
+      },
+      "adv_attributes_player": {
+        "title": "Advanced: player info",
+        "description": "Templates. Leave empty to copy from the base player (if you set one).",
+        "data": {
+          "volume_level": "Volume level",
+          "is_volume_muted": "Muted",
+          "source": "Current source",
+          "sound_mode": "Current sound mode",
+          "shuffle": "Shuffle",
+          "repeat": "Repeat",
+          "group_members": "Group members"
+        },
+        "data_description": {
+          "volume_level": "A number from 0 to 1.",
+          "repeat": "One of: off, all, one.",
+          "group_members": "A list of entity IDs, or a comma separated list."
+        }
+      },
+      "adv_custom_attributes": {
+        "title": "Advanced: extra attributes",
+        "description": "A YAML dictionary of name: template.",
+        "data": {
+          "custom_attributes": "Extra attributes"
+        }
+      },
+      "adv_services_playback": {
+        "title": "Advanced: playback buttons",
+        "description": "Actions that run when each button is pressed. Leave empty to use the base player (or nothing).",
+        "data": {
+          "media_play": "Play",
+          "media_pause": "Pause",
+          "media_stop": "Stop",
+          "media_play_pause": "Play / pause",
+          "media_next_track": "Next track",
+          "media_previous_track": "Previous track",
+          "media_seek": "Seek"
+        }
+      },
+      "adv_services_power": {
+        "title": "Advanced: power and volume buttons",
+        "description": "Actions that run when each button is pressed.",
+        "data": {
+          "turn_on": "Turn on",
+          "turn_off": "Turn off",
+          "toggle": "Toggle power",
+          "volume_up": "Volume up",
+          "volume_down": "Volume down",
+          "volume_mute": "Mute / unmute",
+          "volume_set": "Set volume"
+        }
+      },
+      "adv_services_other": {
+        "title": "Advanced: other buttons",
+        "description": "Actions that run when each button is pressed.",
+        "data": {
+          "repeat_set": "Set repeat",
+          "shuffle_set": "Set shuffle",
+          "play_media": "Play media",
+          "clear_playlist": "Clear playlist",
+          "join": "Join group",
+          "unjoin": "Leave group"
         }
       }
     },
