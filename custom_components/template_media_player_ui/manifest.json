@@ -1,13 +1,13 @@
 {
   "domain": "template_media_player_ui",
   "name": "Template Media Player (UI)",
-  "codeowners": [],
+  "codeowners": ["@jonathangibson98"],
   "config_flow": true,
   "dependencies": ["media_player"],
-  "documentation": "https://github.com/EuleMitKeule/template-media-player",
+  "documentation": "https://github.com/jonathangibson98/template-media-player-ui",
   "integration_type": "device",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/EuleMitKeule/template-media-player/issues",
+  "issue_tracker": "https://github.com/jonathangibson98/template-media-player-ui/issues",
   "requirements": [],
-  "version": "1.0.0"
+  "version": "1.1.0"
 }

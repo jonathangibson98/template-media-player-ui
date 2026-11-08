@@ -89,3 +89,64 @@ SERVICES_OTHER = [
     "unjoin",
 ]
 ALL_SERVICES = SERVICES_PLAYBACK + SERVICES_POWER + SERVICES_OTHER
+
+# ---------------------------------------------------------------------------
+# Friendly names shown in the pick lists: name -> (label, what it does)
+# ---------------------------------------------------------------------------
+ATTRIBUTE_INFO: dict[str, tuple[str, str]] = {
+    "media_title": ("Title", "what is playing"),
+    "media_artist": ("Artist", "who is performing"),
+    "media_album_name": ("Album", "album name"),
+    "media_album_artist": ("Album artist", "artist of the album"),
+    "media_series_title": ("Series title", "TV show name"),
+    "media_season": ("Season", "season number"),
+    "media_episode": ("Episode", "episode number"),
+    "media_channel": ("Channel", "TV or radio channel"),
+    "media_playlist": ("Playlist", "current playlist"),
+    "media_track": ("Track number", "position in the album/playlist"),
+    "media_content_id": ("Content ID", "internal id of what is playing"),
+    "media_content_type": ("Content type", "music, movie, tvshow, channel..."),
+    "media_duration": ("Duration", "total length in seconds"),
+    "media_position": ("Position", "seconds played so far"),
+    "media_position_updated_at": ("Position updated at", "when the position was measured"),
+    "media_image_url": ("Image URL", "cover art address"),
+    "media_image_remotely_accessible": ("Image is remotely accessible", "yes/no"),
+    "entity_picture": ("Entity picture", "cover art shown on the card"),
+    "app_id": ("App ID", "id of the running app"),
+    "app_name": ("App name", "name of the running app"),
+    "media_content_rating": ("Content rating", "e.g. PG-13"),
+    "media_summary": ("Summary", "description of what is playing"),
+    "volume_level": ("Volume level", "0 to 1"),
+    "is_volume_muted": ("Muted", "yes/no"),
+    "source": ("Current source", "selected input"),
+    "sound_mode": ("Current sound mode", "selected sound mode"),
+    "shuffle": ("Shuffle", "yes/no"),
+    "repeat": ("Repeat", "off, all or one"),
+    "group_members": ("Group members", "players grouped with this one"),
+}
+
+SERVICE_INFO: dict[str, tuple[str, str]] = {
+    "media_play": ("Play", ""),
+    "media_pause": ("Pause", ""),
+    "media_stop": ("Stop", ""),
+    "media_play_pause": ("Play / pause", "toggle button"),
+    "media_next_track": ("Next track", ""),
+    "media_previous_track": ("Previous track", ""),
+    "media_seek": ("Seek", "jump to a position"),
+    "turn_on": ("Turn on", ""),
+    "turn_off": ("Turn off", ""),
+    "toggle": ("Toggle power", ""),
+    "volume_up": ("Volume up", ""),
+    "volume_down": ("Volume down", ""),
+    "volume_mute": ("Mute / unmute", ""),
+    "volume_set": ("Set volume", "slider"),
+    "repeat_set": ("Set repeat", ""),
+    "shuffle_set": ("Set shuffle", ""),
+    "play_media": ("Play media", "from the media browser"),
+    "clear_playlist": ("Clear playlist", ""),
+    "join": ("Join group", ""),
+    "unjoin": ("Leave group", ""),
+}
+
+# Picking an item from a list that means "go back"
+BACK = "__back__"
