@@ -315,17 +315,19 @@ class TemplateMediaPlayer(MediaPlayerEntity):
         self.async_write_ha_state()
 
     # --------------------------------------------------------------- rendering
-    def _render(self, tpl: Template | None, extra: dict[str, Any] | None = None) -> Any:
+    def _render(
+        self, tpl: Template | None, extra: dict[str, Any] | None = None, *, parse_result: bool = False
+    ) -> Any:
         if tpl is None:
             return None
         try:
             result = tpl.async_render(
-                variables={**self._variables, **(extra or {})}, parse_result=False
+                variables={**self._variables, **(extra or {})}, parse_result=parse_result
             )
         except TemplateError as err:
             _LOGGER.warning("Template error in %s: %s", self.entity_id, err)
             return None
-        return _clean(result)
+        return result if parse_result else _clean(result)
 
     @callback
     def _refresh(self) -> None:
@@ -369,7 +371,9 @@ class TemplateMediaPlayer(MediaPlayerEntity):
         for name in ALL_ATTRIBUTES:
             tpl = self._attr_tpls.get(name)
             if tpl is not None:
-                raw = self._render(tpl, {"attribute": name})
+                raw = self._render(
+                    tpl, {"attribute": name}, parse_result=name in LIST_ATTRIBUTES
+                )
             elif base_state is not None:
                 raw = _clean(base_state.attributes.get(name))
             else:
