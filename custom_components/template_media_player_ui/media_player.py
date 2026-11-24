@@ -49,6 +49,7 @@ from .const import (
     EXTRA_ONLY_ATTRIBUTES,
     FLOAT_ATTRIBUTES,
     INT_ATTRIBUTES,
+    LIST_ATTRIBUTES,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -75,6 +76,8 @@ FEATURE_MAP: dict[str, MediaPlayerEntityFeature] = {
     "repeat_set": F.REPEAT_SET,
     "play_media": F.PLAY_MEDIA,
     "clear_playlist": F.CLEAR_PLAYLIST,
+    "select_source": F.SELECT_SOURCE,
+    "select_sound_mode": F.SELECT_SOUND_MODE,
     "join": F.GROUPING,
     "unjoin": F.GROUPING,
 }
@@ -139,7 +142,7 @@ def _coerce(name: str, value: Any) -> Any:
             return dt_util.parse_datetime(str(value))
         if name == "repeat":
             return RepeatMode(str(value).strip().lower())
-        if name == "group_members":
+        if name in LIST_ATTRIBUTES:
             return _to_list(value)
         return str(value)
     except (ValueError, TypeError):
@@ -264,9 +267,9 @@ class TemplateMediaPlayer(MediaPlayerEntity):
         features = MediaPlayerEntityFeature(0)
         for key in self._scripts:
             features |= FEATURE_MAP.get(key, MediaPlayerEntityFeature(0))
-        if self._source_scripts:
+        if self._source_scripts or "source_list" in self._attr_tpls:
             features |= F.SELECT_SOURCE
-        if self._sound_scripts:
+        if self._sound_scripts or "sound_mode_list" in self._attr_tpls:
             features |= F.SELECT_SOUND_MODE
         if self._browse_target:
             features |= F.BROWSE_MEDIA
@@ -314,17 +317,19 @@ class TemplateMediaPlayer(MediaPlayerEntity):
         self.async_write_ha_state()
 
     # --------------------------------------------------------------- rendering
-    def _render(self, tpl: Template | None, extra: dict[str, Any] | None = None) -> Any:
+    def _render(
+        self, tpl: Template | None, extra: dict[str, Any] | None = None, *, parse_result: bool = False
+    ) -> Any:
         if tpl is None:
             return None
         try:
             result = tpl.async_render(
-                variables={**self._variables, **(extra or {})}, parse_result=False
+                variables={**self._variables, **(extra or {})}, parse_result=parse_result
             )
         except TemplateError as err:
             _LOGGER.warning("Template error in %s: %s", self.entity_id, err)
             return None
-        return _clean(result)
+        return result if parse_result else _clean(result)
 
     @callback
     def _refresh(self) -> None:
@@ -368,7 +373,9 @@ class TemplateMediaPlayer(MediaPlayerEntity):
         for name in ALL_ATTRIBUTES:
             tpl = self._attr_tpls.get(name)
             if tpl is not None:
-                raw = self._render(tpl, {"attribute": name})
+                raw = self._render(
+                    tpl, {"attribute": name}, parse_result=name in LIST_ATTRIBUTES
+                )
             elif base_state is not None:
                 raw = _clean(base_state.attributes.get(name))
             else:
@@ -391,20 +398,22 @@ class TemplateMediaPlayer(MediaPlayerEntity):
             elif value is not None:
                 extra[name] = value
 
-        # source + sound mode lists
-        if self._source_scripts:
-            self._attr_source_list = list(self._source_scripts)
-        elif base_state is not None:
-            self._attr_source_list = base_state.attributes.get("source_list")
-        else:
-            self._attr_source_list = None
+        # source + sound mode lists (template overrides take priority)
+        if "source_list" not in self._attr_tpls:
+            if self._source_scripts:
+                self._attr_source_list = list(self._source_scripts)
+            elif base_state is not None:
+                self._attr_source_list = base_state.attributes.get("source_list")
+            else:
+                self._attr_source_list = None
 
-        if self._sound_scripts:
-            self._attr_sound_mode_list = list(self._sound_scripts)
-        elif base_state is not None:
-            self._attr_sound_mode_list = base_state.attributes.get("sound_mode_list")
-        else:
-            self._attr_sound_mode_list = None
+        if "sound_mode_list" not in self._attr_tpls:
+            if self._sound_scripts:
+                self._attr_sound_mode_list = list(self._sound_scripts)
+            elif base_state is not None:
+                self._attr_sound_mode_list = base_state.attributes.get("sound_mode_list")
+            else:
+                self._attr_sound_mode_list = None
 
         # custom attributes (anything you want)
         for name, tpl in self._custom_tpls.items():
@@ -553,8 +562,13 @@ class TemplateMediaPlayer(MediaPlayerEntity):
             await script.async_run(
                 run_variables={"source": source}, context=self._context
             )
-        elif self._base:
-            await self._forward("select_source", {"source": source})
+        else:
+            # Fall through to a generic select_source service script, then base player
+            await self._dispatch(
+                "select_source",
+                {"source": source},
+                {"source": source},
+            )
 
     async def async_select_sound_mode(self, sound_mode: str) -> None:
         script = self._sound_scripts.get(sound_mode)
@@ -563,8 +577,12 @@ class TemplateMediaPlayer(MediaPlayerEntity):
                 run_variables={"sound_mode": sound_mode, "source": sound_mode},
                 context=self._context,
             )
-        elif self._base:
-            await self._forward("select_sound_mode", {"sound_mode": sound_mode})
+        else:
+            await self._dispatch(
+                "select_sound_mode",
+                {"sound_mode": sound_mode},
+                {"sound_mode": sound_mode},
+            )
 
     # ------------------------------------------------------- browse + search
     def _delegate(self, entity_id: str | None) -> MediaPlayerEntity:

@@ -37,6 +37,33 @@ A ✓ in a list means that item is already set up.
 3. **Buttons: power and volume -> Set volume**: *Pass it on to another media player* -> `media_player.soundbar`.
 4. **Sources -> Add or change a source -> Plex**: *Pass it on to another media player* -> `media_player.tv`, with the name on that player set to `Plex` if it's called something different there.
 
+## Example: template-driven source list with a custom select action
+
+If your sources come from an `input_select` (or any other entity) rather than
+a fixed list of names, you can combine a **source list template** with a
+generic **select source action**:
+
+1. **Configure -> Player info -> Source list**: *Advanced: write a template myself* ->
+   `{{ state_attr('input_select.office_speakers_inputs', 'options') }}`
+2. **Configure -> Buttons: source, sound mode... -> Select source**: *Control a device* ->
+   `input_select.office_speakers_inputs` -> `select_option`. The `source` variable
+   is filled in automatically.
+
+This way the source picker shows whatever options the `input_select` has, and
+selecting one calls `input_select.select_option` with that value.
+
+> **YAML quoting tip:** if you write the action in YAML mode instead of using
+> the wizard, quote template expressions with single quotes so YAML doesn't
+> parse the braces as a flow mapping:
+>
+> ```yaml
+> action: input_select.select_option
+> data:
+>   option: '{{ source }}'
+> target:
+>   entity_id: input_select.office_speakers_inputs
+> ```
+
 ## How inheritance works
 If a **base media player** is set, anything you leave empty is taken from it
 (state, attributes, source list) and any button you don't set up is passed on to it.

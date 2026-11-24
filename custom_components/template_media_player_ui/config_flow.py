@@ -301,8 +301,8 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
         lines.append(f"State: {'set' if opts.get(CONF_STATE) else 'default'}")
         lines.append(f"Attributes set: {len(opts.get(CONF_ATTRIBUTES) or {})}")
         lines.append(f"Actions set: {len(opts.get(CONF_SERVICE_SCRIPTS) or {})}")
-        lines.append(f"Sources: {len(opts.get(CONF_SOURCE_SCRIPTS) or {})}")
-        lines.append(f"Sound modes: {len(opts.get(CONF_SOUND_MODE_SCRIPTS) or {})}")
+        lines.append(f"Sources: {self._list_summary(CONF_SOURCE_SCRIPTS, 'source_list')}")
+        lines.append(f"Sound modes: {self._list_summary(CONF_SOUND_MODE_SCRIPTS, 'sound_mode_list')}")
         return "  \n".join(lines)
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
@@ -924,15 +924,21 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
     # =========================================================================
     # SOURCES + SOUND MODES (a name, plus what happens when it is picked)
     # =========================================================================
-    async def _named_menu(self, step_id: str) -> ConfigFlowResult:
-        conf_key = CONF_SOURCE_SCRIPTS if step_id == "sources" else CONF_SOUND_MODE_SCRIPTS
-        return self.async_show_menu(
-            step_id=step_id,
-            menu_options=[f"{step_id}_edit", f"{step_id}_remove", "init"],
-            description_placeholders=self._ph(
-                count=len(self._current().get(conf_key) or {})
-            ),
-        )
+    def _list_summary(self, conf_key: str, list_attr: str) -> str:
+        """One-line summary: how many per-name scripts + whether a list template is set."""
+        count = len(self._current().get(conf_key) or {})
+        tpl_str = (self._current().get(CONF_ATTRIBUTES) or {}).get(list_attr)
+        parts = [f"{count} named"]
+        if tpl_str:
+            try:
+                rendered = Template(tpl_str, self.hass).async_render(parse_result=True)
+                if isinstance(rendered, (list, tuple)):
+                    parts.append(f"{len(rendered)} from entity")
+                else:
+                    parts.append("list from entity set")
+            except TemplateError:
+                parts.append("list from entity set")
+        return ", ".join(parts)
 
     async def _named_pick(
         self,
@@ -988,7 +994,17 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
         )
 
     async def async_step_sources(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        return await self._named_menu("sources")
+        return self.async_show_menu(
+            step_id="sources",
+            menu_options=["sources_from_entity", "sources_edit", "sources_remove", "init"],
+            description_placeholders=self._ph(
+                summary=self._list_summary(CONF_SOURCE_SCRIPTS, "source_list")
+            ),
+        )
+
+    async def async_step_sources_from_entity(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        self._ctx = {"kind": "attr", "name": "source_list", "back": "sources"}
+        return await self.async_step_value_start()
 
     async def async_step_sources_edit(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         return await self._named_pick(
@@ -999,7 +1015,17 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
         return await self._remove_names("sources_remove", CONF_SOURCE_SCRIPTS, "sources", user_input)
 
     async def async_step_sound_modes(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        return await self._named_menu("sound_modes")
+        return self.async_show_menu(
+            step_id="sound_modes",
+            menu_options=["sound_modes_from_entity", "sound_modes_edit", "sound_modes_remove", "init"],
+            description_placeholders=self._ph(
+                summary=self._list_summary(CONF_SOUND_MODE_SCRIPTS, "sound_mode_list")
+            ),
+        )
+
+    async def async_step_sound_modes_from_entity(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        self._ctx = {"kind": "attr", "name": "sound_mode_list", "back": "sound_modes"}
+        return await self.async_step_value_start()
 
     async def async_step_sound_modes_edit(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         return await self._named_pick(

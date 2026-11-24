@@ -47,7 +47,9 @@ ATTRIBUTES_PLAYER = [
     "volume_level",
     "is_volume_muted",
     "source",
+    "source_list",
     "sound_mode",
+    "sound_mode_list",
     "shuffle",
     "repeat",
     "group_members",
@@ -58,6 +60,7 @@ ALL_ATTRIBUTES = ATTRIBUTES_MEDIA + ATTRIBUTES_PLAYER
 INT_ATTRIBUTES = {"media_duration", "media_position", "media_track"}
 FLOAT_ATTRIBUTES = {"volume_level"}
 BOOL_ATTRIBUTES = {"is_volume_muted", "shuffle", "media_image_remotely_accessible"}
+LIST_ATTRIBUTES = {"source_list", "sound_mode_list", "group_members"}
 # These have no native MediaPlayerEntity property, so they show up as plain state attributes
 EXTRA_ONLY_ATTRIBUTES = {"media_content_rating", "media_summary"}
 
@@ -81,6 +84,8 @@ SERVICES_POWER = [
     "volume_set",
 ]
 SERVICES_OTHER = [
+    "select_source",
+    "select_sound_mode",
     "repeat_set",
     "shuffle_set",
     "play_media",
@@ -119,7 +124,9 @@ ATTRIBUTE_INFO: dict[str, tuple[str, str]] = {
     "volume_level": ("Volume level", "0 to 1"),
     "is_volume_muted": ("Muted", "yes/no"),
     "source": ("Current source", "selected input"),
+    "source_list": ("Source list", "available input sources"),
     "sound_mode": ("Current sound mode", "selected sound mode"),
+    "sound_mode_list": ("Sound mode list", "available sound modes"),
     "shuffle": ("Shuffle", "yes/no"),
     "repeat": ("Repeat", "off, all or one"),
     "group_members": ("Group members", "players grouped with this one"),
@@ -140,6 +147,8 @@ SERVICE_INFO: dict[str, tuple[str, str]] = {
     "volume_down": ("Volume down", ""),
     "volume_mute": ("Mute / unmute", ""),
     "volume_set": ("Set volume", "slider"),
+    "select_source": ("Select source", "pick an input"),
+    "select_sound_mode": ("Select sound mode", "pick a sound mode"),
     "repeat_set": ("Set repeat", ""),
     "shuffle_set": ("Set shuffle", ""),
     "play_media": ("Play media", "from the media browser"),
