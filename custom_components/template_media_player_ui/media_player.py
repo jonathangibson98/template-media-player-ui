@@ -76,6 +76,8 @@ FEATURE_MAP: dict[str, MediaPlayerEntityFeature] = {
     "repeat_set": F.REPEAT_SET,
     "play_media": F.PLAY_MEDIA,
     "clear_playlist": F.CLEAR_PLAYLIST,
+    "select_source": F.SELECT_SOURCE,
+    "select_sound_mode": F.SELECT_SOUND_MODE,
     "join": F.GROUPING,
     "unjoin": F.GROUPING,
 }
@@ -560,8 +562,13 @@ class TemplateMediaPlayer(MediaPlayerEntity):
             await script.async_run(
                 run_variables={"source": source}, context=self._context
             )
-        elif self._base:
-            await self._forward("select_source", {"source": source})
+        else:
+            # Fall through to a generic select_source service script, then base player
+            await self._dispatch(
+                "select_source",
+                {"source": source},
+                {"source": source},
+            )
 
     async def async_select_sound_mode(self, sound_mode: str) -> None:
         script = self._sound_scripts.get(sound_mode)
@@ -570,8 +577,12 @@ class TemplateMediaPlayer(MediaPlayerEntity):
                 run_variables={"sound_mode": sound_mode, "source": sound_mode},
                 context=self._context,
             )
-        elif self._base:
-            await self._forward("select_sound_mode", {"sound_mode": sound_mode})
+        else:
+            await self._dispatch(
+                "select_sound_mode",
+                {"sound_mode": sound_mode},
+                {"sound_mode": sound_mode},
+            )
 
     # ------------------------------------------------------- browse + search
     def _delegate(self, entity_id: str | None) -> MediaPlayerEntity:

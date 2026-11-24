@@ -119,6 +119,8 @@ SERVICE_VARS: dict[str, list[str]] = {
     "media_seek": ["position"],
     "volume_set": ["volume"],
     "volume_mute": ["mute"],
+    "select_source": ["source"],
+    "select_sound_mode": ["sound_mode"],
     "repeat_set": ["repeat"],
     "shuffle_set": ["shuffle"],
     "play_media": ["media_id", "media_type"],

@@ -84,6 +84,8 @@ SERVICES_POWER = [
     "volume_set",
 ]
 SERVICES_OTHER = [
+    "select_source",
+    "select_sound_mode",
     "repeat_set",
     "shuffle_set",
     "play_media",
@@ -145,6 +147,8 @@ SERVICE_INFO: dict[str, tuple[str, str]] = {
     "volume_down": ("Volume down", ""),
     "volume_mute": ("Mute / unmute", ""),
     "volume_set": ("Set volume", "slider"),
+    "select_source": ("Select source", "pick an input"),
+    "select_sound_mode": ("Select sound mode", "pick a sound mode"),
     "repeat_set": ("Set repeat", ""),
     "shuffle_set": ("Set shuffle", ""),
     "play_media": ("Play media", "from the media browser"),

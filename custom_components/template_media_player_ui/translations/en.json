@@ -34,7 +34,7 @@
           "custom_attrs": "Extra attributes (your own)",
           "actions_playback": "Buttons: play, pause, stop, next, previous, seek",
           "actions_power": "Buttons: power and volume",
-          "actions_other": "Buttons: repeat, shuffle, play media, grouping",
+          "actions_other": "Buttons: source, sound mode, repeat, shuffle, grouping",
           "sources": "Sources (inputs)",
           "sound_modes": "Sound modes",
           "advanced": "Advanced: write templates / YAML yourself",
@@ -86,8 +86,8 @@
         }
       },
       "actions_other": {
-        "title": "Other buttons",
-        "description": "Pick one to set it up. A ✓ means it's already set. You'll choose what happens when it's pressed.",
+        "title": "Other buttons and actions",
+        "description": "Pick one to set it up. A ✓ means it's already set. You'll choose what happens when it's used.",
         "data": {
           "choice": "Choose one"
         }
@@ -387,7 +387,9 @@
           "volume_level": "Volume level",
           "is_volume_muted": "Muted",
           "source": "Current source",
+          "source_list": "Source list",
           "sound_mode": "Current sound mode",
+          "sound_mode_list": "Sound mode list",
           "shuffle": "Shuffle",
           "repeat": "Repeat",
           "group_members": "Group members"
@@ -435,6 +437,8 @@
         "title": "Advanced: other buttons",
         "description": "Actions that run when each button is pressed.",
         "data": {
+          "select_source": "Select source",
+          "select_sound_mode": "Select sound mode",
           "repeat_set": "Set repeat",
           "shuffle_set": "Set shuffle",
           "play_media": "Play media",
