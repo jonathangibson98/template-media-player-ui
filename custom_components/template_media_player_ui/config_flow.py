@@ -927,10 +927,17 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
     def _list_summary(self, conf_key: str, list_attr: str) -> str:
         """One-line summary: how many per-name scripts + whether a list template is set."""
         count = len(self._current().get(conf_key) or {})
-        tpl = (self._current().get(CONF_ATTRIBUTES) or {}).get(list_attr)
+        tpl_str = (self._current().get(CONF_ATTRIBUTES) or {}).get(list_attr)
         parts = [f"{count} named"]
-        if tpl:
-            parts.append("list from entity set")
+        if tpl_str:
+            try:
+                rendered = Template(tpl_str, self.hass).async_render(parse_result=True)
+                if isinstance(rendered, (list, tuple)):
+                    parts.append(f"{len(rendered)} from entity")
+                else:
+                    parts.append("list from entity set")
+            except TemplateError:
+                parts.append("list from entity set")
         return ", ".join(parts)
 
     async def _named_pick(
