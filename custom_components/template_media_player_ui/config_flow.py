@@ -301,8 +301,8 @@ class TemplateMediaPlayerOptionsFlow(OptionsFlow):
         lines.append(f"State: {'set' if opts.get(CONF_STATE) else 'default'}")
         lines.append(f"Attributes set: {len(opts.get(CONF_ATTRIBUTES) or {})}")
         lines.append(f"Actions set: {len(opts.get(CONF_SERVICE_SCRIPTS) or {})}")
-        lines.append(f"Sources: {len(opts.get(CONF_SOURCE_SCRIPTS) or {})}")
-        lines.append(f"Sound modes: {len(opts.get(CONF_SOUND_MODE_SCRIPTS) or {})}")
+        lines.append(f"Sources: {self._list_summary(CONF_SOURCE_SCRIPTS, 'source_list')}")
+        lines.append(f"Sound modes: {self._list_summary(CONF_SOUND_MODE_SCRIPTS, 'sound_mode_list')}")
         return "  \n".join(lines)
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
