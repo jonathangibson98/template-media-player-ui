@@ -270,10 +270,11 @@
       },
       "sources": {
         "title": "Sources",
-        "description": "Each source is a name, plus what happens when someone picks it. You have {count} so far.",
+        "description": "Set up where the source list comes from and what happens when one is picked.\n\nCurrent: {summary}",
         "menu_options": {
-          "sources_edit": "Add or change a source",
-          "sources_remove": "Remove sources",
+          "sources_from_entity": "Source list from an entity",
+          "sources_edit": "Add or change a named source (with its own action)",
+          "sources_remove": "Remove named sources",
           "init": "Back"
         }
       },
@@ -293,10 +294,11 @@
       },
       "sound_modes": {
         "title": "Sound modes",
-        "description": "Each sound mode is a name, plus what happens when someone picks it. You have {count} so far.",
+        "description": "Set up where the sound mode list comes from and what happens when one is picked.\n\nCurrent: {summary}",
         "menu_options": {
-          "sound_modes_edit": "Add or change a sound mode",
-          "sound_modes_remove": "Remove sound modes",
+          "sound_modes_from_entity": "Sound mode list from an entity",
+          "sound_modes_edit": "Add or change a named sound mode (with its own action)",
+          "sound_modes_remove": "Remove named sound modes",
           "init": "Back"
         }
       },
